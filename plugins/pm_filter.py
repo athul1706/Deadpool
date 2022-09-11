@@ -716,6 +716,11 @@ async def auto_filter(client, msg, spoll=False):
     imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
     TEMPLATE = settings['template']
     if imdb:
+        user = message.from_user
+        first = 'Anonymous' if not user else message.from_user.first_name
+        last = 'Anonymous' if not user else message.from_user.last_name
+        mention = 'Anonymous' if not user else message.from_user.mention
+        chat = message.chat.title
         cap = TEMPLATE.format(
             query=search,
             title=imdb['title'],
