@@ -15,8 +15,8 @@
       "index",
       "inline"
     ],
-    "website": "https://github.com/EvamariaTG/EvaMaria",
-    "repository": "https://github.com/EvamariaTG/EvaMaria",
+    "website": "https://github.com/Athul1223/Deadpool",
+    "repository": "https://github.com/Athul1223/Deadpool",
     "env": {
         "BOT_TOKEN": {
             "description": "Your bot token.",
