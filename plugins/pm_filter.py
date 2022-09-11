@@ -414,7 +414,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             protect_content=True if ident == 'checksubp' else False
         )
     elif query.data == "pages":
-        await query.answer("⚠️ Clicking page buttons will not work!"))
+        await query.answer("⚠️ Clicking page buttons will not work!")
     elif query.data == "start":
         now = datetime.datetime.now()
         tz = pytz.timezone('Asia/Kolkata')
