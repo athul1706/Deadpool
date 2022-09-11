@@ -6,6 +6,7 @@ import math
 import time
 import datetime
 import pytz
+import shutil 
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from Script import script
 import pyrogram
@@ -382,7 +383,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             except Exception as e:
                 await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
         else:
-            await query.answer("🔰That's not for you🔰")
+            await query.answer(script.NOT_TEXT.format(query.from_user.first_name, query.message.reply_to_message.from_user.first_name), show_alert=True)           
     elif query.data.startswith("checksub"):
         if AUTH_CHANNEL and not await is_subscribed(client, query):
             await query.answer("I Like Your Smartness, But Don't Be Oversmart 😒", show_alert=True)
@@ -413,7 +414,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             protect_content=True if ident == 'checksubp' else False
         )
     elif query.data == "pages":
-        await query.answer()
+        await query.answer("⚠️ Clicking page buttons will not work!"))
     elif query.data == "start":
         now = datetime.datetime.now()
         tz = pytz.timezone('Asia/Kolkata')
