@@ -12,7 +12,7 @@ media_filter = filters.document | filters.video | filters.audio
 async def deltemedia(bot, message):
     """Delete file from database"""
     reply = message   
-    for file_type in (enums.MessageMediaType.DOCUMENT, enums.MessageMediaType.VIDEO, enums.MessageMediaType.AUDIO):
+    for file_type in ("document", "video", "audio"):
         media = getattr(reply, file_type, None)
         if media is not None:
             break
