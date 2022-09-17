@@ -1,6 +1,6 @@
 import logging
-from pyrogram import Client, filters
-from info import DELETE_CHANNELS
+from pyrogram import Client, filters, enums
+from info import DELETE_CHANNEL
 from database.ia_filterdb import Media, unpack_new_file_id
 
 logger = logging.getLogger(__name__)
@@ -8,11 +8,11 @@ logger = logging.getLogger(__name__)
 media_filter = filters.document | filters.video | filters.audio
 
 
-@Client.on_message(filters.chat(DELETE_CHANNELS) & media_filter)
+@Client.on_message(filters.chat(DELETE_CHANNEL) & media_filter)
 async def deltemedia(bot, message):
     """Delete file from database"""
     reply = message   
-    for file_type in ("document", "video", "audio"):
+    for file_type in (enums.MessageMediaType.DOCUMENT, enums.MessageMediaType.VIDEO, enums.MessageMediaType.AUDIO):
         media = getattr(reply, file_type, None)
         if media is not None:
             break
