@@ -1,6 +1,6 @@
 # Deadpool
 Deadpool bot back to old version with pyrogram 2.O
-
+Minor update(2/11) 
 <details><summary>Deploy To Heroku</summary>
 <p>
 <br>
