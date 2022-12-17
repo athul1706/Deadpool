@@ -879,7 +879,7 @@ async def manual_filters(client, message, text=False):
 
 
 
-@Client.on_message(filters.private & filters.text & filters.incoming)
+@Client.on_message(filters.private & filters.text & filters.incoming & ~filters.group)
 async def pmauto_filter(client, msg, spoll=False):
     if not spoll:
         message = msg
