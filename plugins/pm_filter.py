@@ -919,7 +919,7 @@ async def pmauto_filter(client, msg, spoll=False):
             files, offset, total_results = await get_search_results(search.lower(), offset=0, filter=True)
             if not files:
                 if settings["spell_check"]:
-                    return await advantage_spell_chok(msg)
+                    return await advantage_spell_check(msg)
                 else:
                     return
         else:
@@ -1102,7 +1102,7 @@ async def nextp_page(bot, query):
     await query.answer()
 
 @Client.on_callback_query(filters.regex(r"^spollingpm"))
-async def advantage_spoll_choker(bot, query):
+async def advantage_spoll_check(bot, query):
     _, user, movie_ = query.data.split('#')
     if int(user) != 0 and query.from_user.id != int(user):
         return await query.answer("okDa", show_alert=True)
