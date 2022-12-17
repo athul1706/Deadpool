@@ -919,7 +919,7 @@ async def pmauto_filter(client, msg, spoll=False):
             files, offset, total_results = await get_search_results(search.lower(), offset=0, filter=True)
             if not files:
                 if settings["spell_check"]:
-                    return await advantage_spell_check(msg)
+                    return await advantage_spell_check(bot, msg)
                 else:
                     return
         else:
