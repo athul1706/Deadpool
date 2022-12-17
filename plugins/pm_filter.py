@@ -1124,7 +1124,7 @@ async def advantage_spoll_chec(bot, query):
             await asyncio.sleep(10)
             await k.delete()
 
-async def advantage_spell_check(msg):
+async def advantage_spell_check(bot, msg):
     query = re.sub(
         r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|br((o|u)h?)*|^h(e|a)?(l)*(o)*|mal(ayalam)?|t(h)?amil|file|that|find|und(o)*|kit(t(i|y)?)?o(w)?|thar(u)?(o)*w?|kittum(o)*|aya(k)*(um(o)*)?|full\smovie|any(one)|with\ssubtitle(s)?)",
         "", msg.text, flags=re.IGNORECASE)  # plis contribute some common words
@@ -1162,7 +1162,7 @@ async def advantage_spell_check(msg):
     movielist += [(re.sub(r'(\-|\(|\)|_)', '', i, flags=re.IGNORECASE)).strip() for i in gs_parsed]
     movielist = list(dict.fromkeys(movielist))  # removing duplicates
     if not movielist:
-        k = await msg.reply("I couldn't find anything related to that. Check your spelling")
+        k = await bot.send_message("I couldn't find anything related to that. Check your spelling")
         await asyncio.sleep(8)
         await k.delete()
         return
@@ -1174,5 +1174,5 @@ async def advantage_spell_check(msg):
         )
     ] for k, movie in enumerate(movielist)]
     btn.append([InlineKeyboardButton(text="Close", callback_data=f'spollingpm#{user}#close_spellcheck')])
-    await msg.reply("I couldn't find anything related to that\nDid you mean any one of these?",
-                    reply_markup=InlineKeyboardMarkup(btn))
+    await bot.send_message("I couldn't find anything related to that\nDid you mean any one of these?",
+                    reply_markup=InlineKeyboardMarkup(btn), reply_to_message_id=msg.id)
