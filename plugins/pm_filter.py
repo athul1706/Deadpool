@@ -361,6 +361,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 caption=f_caption,
                 protect_content=True if ident == "filep" else False 
             )
+        except Exception as e:
+            logger.exception(e) 
     if query.data.startswith("file"):
         clicked = query.from_user.id
         try:
