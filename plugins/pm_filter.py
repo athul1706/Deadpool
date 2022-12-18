@@ -929,7 +929,7 @@ async def pmauto_filter(client, msg, spoll=False):
         message = msg.message.reply_to_message  # msg will be callback query
         search, files, offset, total_results = spoll
     prem = 'athul'
-    if settings["button"]:
+    if not SINGLE_BUTTON:
         btn = [
             [
                 InlineKeyboardButton(
@@ -1023,7 +1023,7 @@ async def pmauto_filter(client, msg, spoll=False):
         await msg.message.delete()
 
 
-@Client.on_callback_query(filters.regex(r"^nextp"))
+@Client.on_callback_query(filters.regex(r"^nextp") & ~filters.group)
 async def nextp_page(bot, query):
     ident, req, key, offset = query.data.split("_")
     if int(req) not in [query.from_user.id, 0]:
