@@ -595,7 +595,7 @@ async def request_moviez_file(bot, message):
     buttons = [
         [
             InlineKeyboardButton('UPLOADED',
-                                 callback_data=f'rekast#updated#{last_msg_id}#{message.from_user.id}')
+                                 callback_data=f'rekast#updated#{message.id}#{message.from_user.id}')
         ],
         [
             InlineKeyboardButton('ALREADY UPLOADED',
@@ -603,7 +603,7 @@ async def request_moviez_file(bot, message):
         ], 
         [
             InlineKeyboardButton('FILES NOT FOUND',
-                                 callback_data=f'rekast#notfound#{last_msg_id}#{message.from_user.id}')
+                                 callback_data=f'rekast#notfound#{message.id}#{message.from_user.id}')
         ],
     ]
     reply_markup = InlineKeyboardMarkup(buttons)
