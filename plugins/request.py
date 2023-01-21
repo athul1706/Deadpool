@@ -39,7 +39,7 @@ async def request_files(bot, query):
                                reply_to_message_id=int(lst_msg_id))
         
 
-@Client.on_message(filters.command("request") & filters.incoming)
+@Client.on_message(filters.command("request"))
 async def request_moviez(bot, message):   
     if len(message.command) < 2:
         return await message.reply("No Movie name entered. Pls request your movies on format => MOVIE-LANGUAGE-YEAR") 
@@ -60,6 +60,6 @@ async def request_moviez(bot, message):
     ]
     reply_markup = InlineKeyboardMarkup(buttons)
     await bot.send_message(LOG_CHANNEL,
-                           f'#movierequested\n\nBy : {message.from_user.mention} (<code>{message.from_user.id}</code>)\nChat ID/ Username - <code> {chat_id}</code>',
+                           f'#movierequested\n\nBy : {message.from_user.mention} (<code>{message.from_user.id}</code>)\nChat ID/ Username - <code> {chat_id}</code> MOVIE NAME: {rqst}',
                            reply_markup=reply_markup)
-    await message.reply('Thanks for using this feature. You will be notified once your requested file is uploaded☺🥰") 
+    await message.reply("Thanks for using this feature. You will be notified once your requested file is uploaded☺🥰") 
