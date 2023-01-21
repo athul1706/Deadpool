@@ -608,6 +608,6 @@ async def request_moviez_file(bot, message):
     ]
     reply_markup = InlineKeyboardMarkup(buttons)
     await bot.send_message(LOG_CHANNEL,
-                           f'#movierequested\n\nBy : {message.from_user.mention} (<code>{message.from_user.id}</code>)\nChat ID/ Username - <code> {chat_id}</code> MOVIE NAME: {rqst}',
+                           f'#movierequested\n\nBy : {message.from_user.mention} (<code>{message.from_user.id}</code>)\nMOVIE NAME: {rqst}',
                            reply_markup=reply_markup)
     await message.reply("Thanks for using this feature. You will be notified once your requested file is uploaded☺🥰") 
