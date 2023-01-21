@@ -40,7 +40,7 @@ async def request_files(bot, query):
         
 
 @Client.on_message(filters.command("request") & filters.incoming)
-async def start(bot, message):   
+async def request_moviez(bot, message):   
     if len(message.command) < 2:
         return await message.reply("No Movie name entered. Pls request your movies on format => MOVIE-LANGUAGE-YEAR") 
     rqst=message.text.split(' ', 1)[1]
