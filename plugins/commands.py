@@ -568,13 +568,13 @@ async def save_template(client, message):
 @Client.on_callback_query(filters.regex(r'^rekast'))
 async def request_movie_files(bot, query):
     _, athul, lst_msg_id, from_user = query.data.split("#") 
-    if athul = "unupload":
+    if athul == "unupload":
         await query.message.delete() 
         await bot.send_message(int(from_user), 
                                "Sorry..Your request for movie is declined by admin, because it is already in the bot. Check with correct spelling", 
                                reply_to_message_id=int(lst_msg_id))
         return
-    if athul = "notfound":
+    if athul == "notfound":
         await query.message.delete() 
         await bot.send_message(int(from_user), 
                                "Regret to inform you that your requested movie file is not available in telegram right now😞", 
@@ -595,7 +595,7 @@ async def request_moviez_file(bot, message):
     buttons = [
         [
             InlineKeyboardButton('UPLOADED',
-                                 callback_data=f'rekast#accept#{chat_id}#{last_msg_id}#{message.from_user.id}')
+                                 callback_data=f'rekast#updated#{chat_id}#{last_msg_id}#{message.from_user.id}')
         ],
         [
             InlineKeyboardButton('ALREADY UPLOADED',
