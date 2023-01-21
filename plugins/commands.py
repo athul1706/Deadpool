@@ -571,7 +571,7 @@ async def request_movie_files(bot, query):
     if athul == "unupload":
         await query.message.delete() 
         await bot.send_message(int(from_user), 
-                               "Sorry..Your request for movie {query.message.text} is declined by admin, because it is already in the bot. Check with correct spelling🙂", 
+                               "Sorry..Your request for movie is declined by admin, because it is already in the bot. Check with correct spelling🙂", 
                                reply_to_message_id=int(lst_msg_id))
         return
     if athul == "notfound":
