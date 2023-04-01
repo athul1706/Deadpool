@@ -1,6 +1,5 @@
 class script(object):
 
-
     STRT_TXT = """<code>Hello</code> {},
 <code>I am </code> <a href=https://t.me/{}>{}</a>,<code> I support both Auto filter and manual filter modules.Also you can use me as a file sharing bot☺️</code>"""
       
