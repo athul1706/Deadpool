@@ -934,7 +934,7 @@ async def privat_in(client, message):
         ]
 
         if offset != "":
-            key = f"{message.chat.id}-{message.message_id}"
+            key = f"{message.chat.id}-{message.id}"
             BUTTONS[key] = search
             req = message.from_user.id if message.from_user else 0
             mention = message.from_user.mention
