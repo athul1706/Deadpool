@@ -435,8 +435,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
             file_format = file_name_parts[-1]
             if file_format.lower() in f_caption.lower():
                 f_caption = file_format
-        if len(f_caption) > 1024:
-            f_caption = f_caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
+                if len(f_caption) > 1024:
+                    f_caption = f_caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
         if CUSTOM_FILE_CAPTION:
             try:
                 f_caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
