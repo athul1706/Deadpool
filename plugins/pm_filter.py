@@ -7,6 +7,7 @@ import time
 import datetime
 import pytz
 import shutil 
+import difflib
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from Script import script
 import pyrogram
@@ -439,7 +440,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             except Exception as e:
                 logger.exception(e)
                 f_caption = f_caption
-        if f_caption is None:
+        if f_caption is None or difflib.SequenceMatcher(None, f_caption, title).ratio() < 0.7:
             f_caption = f"{title}"
         await query.answer()
         await asyncio.sleep(1) 
