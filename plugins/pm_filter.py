@@ -363,9 +363,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
             try:               
                 if AUTH_CHANNEL and not await is_subscribed(client, query):
+                    await client.send_message(query_from_user.id, "/start") 
+                    await asyncio.sleep(1) 
                     await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
                     return
                 elif settings['botpm']:
+                    await client.send_message(query_from_user.id, "/start") 
+                    await asyncio.sleep(1) 
                     await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
                     return           
                 else:
@@ -375,7 +379,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                         caption=f_caption,
                         protect_content=True if ident == "filep" else False 
                     )
-                    await query.answer('Check PM, I have sent files in pm😊')
+                    await query.answer('Check PM, I have sent files in pm😊', show_alert=True)
             except UserIsBlocked:
                 await query.answer('Unblock the bot mahn !', show_alert=True)
             except PeerIdInvalid:
