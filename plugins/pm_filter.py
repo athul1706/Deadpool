@@ -430,8 +430,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
         f_caption = files.caption
         pattern = r'@[^\s]+|https?://[^\s]+|\[.*?\]\(.*?\)|[^a-zA-Z0-9\s\-.(),<>]|<a href=.*?>(.*?)<\/a>'
         f_caption = re.sub(pattern, '', f_caption).strip()
-        file_format = title.split('.')[-1]  # Get the file format
-        f_caption = re.sub(fr'\.{file_format}.*$', f'.{file_format}', f_caption)
+        file_format = re.search(r'\.([^.]+)$', title)  # Get the file format
+        if file_format:
+            f_caption = re.sub(fr'\.{file_format.group(1)}.*$', fr'.{file_format.group(1)}', f_caption)
         if len(f_caption) > 1024:
             f_caption = f_caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
         if CUSTOM_FILE_CAPTION:
