@@ -427,8 +427,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         title = files.file_name
         size = get_size(files.file_size)
         f_caption = files.caption
-        pattern = r'@[^\s]+|https?://[^\s]+'
-        fn_caption = re.sub(pattern, '', f_caption).strip()        
+        pattern = r'@[^\s]+|https?://[^\s]+|\[.*?\]\(.*?\)'
+        fn_caption = re.sub(pattern, '', f_caption).strip()
         if CUSTOM_FILE_CAPTION:
             try:
                 f_caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
