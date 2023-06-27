@@ -393,7 +393,7 @@ def file_caption(caption, title):
             logger.exception(e)
             caption = caption
 
-    if caption is None or fuzz.partial_ratio(caption, title) < 70:
+    if caption is None or fuzz.partial_ratio(caption, title) < 30:
         caption = title
 
     return caption
