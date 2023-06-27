@@ -1,6 +1,6 @@
 import logging
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
-from info import AUTH_CHANNEL, LONG_IMDB_DESCRIPTION, MAX_LIST_ELM
+from info import AUTH_CHANNEL, LONG_IMDB_DESCRIPTION, MAX_LIST_ELM, CUSTOM_FILE_CAPTION
 from imdb import IMDb
 import asyncio
 from pyrogram.types import Message, InlineKeyboardButton
@@ -13,6 +13,8 @@ from typing import List
 from database.users_chats_db import db
 from bs4 import BeautifulSoup
 import requests
+from fuzzywuzzy import fuzz
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -375,3 +377,23 @@ def humanbytes(size):
         size /= power
         n += 1
     return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
+
+def file_caption(caption, title):
+    # Remove unwanted entities from the caption
+    caption = caption.split('\n')[0]
+    
+    if len(caption) > 1024:
+        caption = caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
+
+    if CUSTOM_FILE_CAPTION:
+        try:
+            caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
+                                                 file_caption='' if caption is None else caption)
+        except Exception as e:
+            logger.exception(e)
+            caption = caption
+
+    if caption is None or fuzz.partial_ratio(caption, title) < 70:
+        caption = title
+
+    return caption
