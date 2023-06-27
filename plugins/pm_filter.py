@@ -36,8 +36,8 @@ SPELL_CHECK = {}
 
 def file_caption(caption, title):
     # Remove unwanted entities from the caption
-    caption = caption.split(title)[0] + title
-
+    caption = caption.split('\n')[0]
+    
     if len(caption) > 1024:
         caption = caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
 
