@@ -34,7 +34,30 @@ logger.setLevel(logging.ERROR)
 BUTTONS = {}
 SPELL_CHECK = {}
 
+def file_caption(caption, title, file_format):
+    # Remove unwanted entities from the caption
+    pattern = r'@[^\s]+|https?://[^\s]+|\[.*?\]\(.*?\)|[^a-zA-Z0-9\s\-.(),<>]|\.(?:\s*){}(?:\s*).*?$'.format(file_format)
+    caption = re.sub(pattern, '', caption).strip()
 
+    # Remove unwanted text after the file caption
+    caption = caption.split(file_format)[0] + file_format
+
+    if len(caption) > 1024:
+        caption = caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
+
+    if CUSTOM_FILE_CAPTION:
+        try:
+            caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
+                                                 file_caption='' if caption is None else caption)
+        except Exception as e:
+            logger.exception(e)
+            caption = caption
+
+    if caption is None or fuzz.partial_ratio(caption, title) < 70:
+        caption = title
+
+    return caption
+    
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     k = await manual_filters(client, message)
@@ -427,22 +450,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
         files = files_[0]
         title = files.file_name
         size = get_size(files.file_size)
-        f_caption = files.caption       
-        pattern = r'@[^\s]+|https?://[^\s]+|\[.*?\]\(.*?\)|[^a-zA-Z0-9\s\-.(),<>]|<a href=.*?>(.*?)<\/a>'
-        f_caption = re.sub(pattern, '', f_caption).strip()        
-        if len(f_caption) > 1024:
-            f_caption = f_caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
-        if CUSTOM_FILE_CAPTION:
-            try:
-                es_f_caption = re.escape(f_caption) 
-                f_caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
-                                                       file_size='' if size is None else size,
-                                                       file_caption='' if es_f_caption is None else es_f_caption)
-            except Exception as e:
-                logger.exception(e)
-                f_caption = f_caption
-        if f_caption is None or fuzz.partial_ratio(f_caption, title) < 70:
-            f_caption = f"{title}"
+        f_caption = files.caption 
+        f_caption = file_caption(f_caption, title, file_format)
+     
         await query.answer()
         await asyncio.sleep(1) 
         await client.send_cached_media(
