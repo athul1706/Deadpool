@@ -52,6 +52,7 @@ async def next_page(bot, query):
         await query.answer("You are using one of my old messages, please send the request again.", show_alert=True)
         return
     if query.message.chat.type == 'private':
+        req = query.from_user.id
         # Private chat next button functionality
         # Implement the logic for private chat here
         pass
