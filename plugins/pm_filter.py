@@ -678,7 +678,7 @@ async def auto_filter(client, msg, spoll=False):
         message = msg
         settings = await get_settings(message.chat.id)
         if message.text.startswith("/"): return  # ignore commands
-        if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", msg.text):
+        if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
             return
         if 2 < len(message.text) < 100:
             search = message.text
@@ -896,7 +896,7 @@ async def manual_filters(client, message, text=False):
 @Client.on_message(filters.text & filters.private)
 async def private_in(client, msg, spoll=False):
     if msg.text.startswith("/"): return  # ignore commands 
-    if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
+    if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", msg.text):
          return
     if 2 < len(message.text) < 100:
        search = message.text
