@@ -19,7 +19,7 @@ from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from utils import get_size, is_subscribed, get_poster, search_gagala, file_caption, temp, get_settings, save_group_settings, humanbytes
 from database.users_chats_db import db
-from database.ia_filterdb import Media, get_file_details, get_search_results
+from database.ia_filterdb import Media, get_file_details, get_search_results, get_pmsearch_results
 from database.filters_mdb import (
     del_all,
     find_filter,
@@ -46,7 +46,7 @@ async def ynext_page(bot, query):
         await query.answer("You are using this for one of my old messages, please send the request again.", show_alert=True)
         return
 
-    files, n_offset, total = await get_search_results(search, offset=offset, filter=True)
+    files, n_offset, total = await get_pmsearch_results(search, offset=offset, filter=True)
     try:
         n_offset = int(n_offset)
     except:
