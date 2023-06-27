@@ -53,11 +53,28 @@ async def next_page(bot, query):
     if not search:
         await query.answer("You are using one of my old messages, please send the request again.", show_alert=True)
         return
-    if query.message.chat.type == 'private':
+    if chat_type == enums.ChatType.PRIVATE:
         req = query.from_user.id
         # Private chat next button functionality
         # Implement the logic for private chat here
-        pass
+        files, n_offset, total = await get_search_results(search, offset=offset, filter=True)
+        try:
+            n_offset = int(n_offset)
+        except:
+            n_offset = 0
+        
+        if not files:
+            return
+
+        btn = [
+            [
+                InlineKeyboardButton(
+                    text=f"{file.file_name} | {get_size(file.file_size)}",
+                    callback_data=f'mypmfile#{file.file_id}'
+                ),
+            ]
+            for file in files
+        ]
     else:
         if int(req) not in [query.from_user.id, 0]:
             return await query.answer("oKda", show_alert=True)
@@ -78,11 +95,11 @@ async def next_page(bot, query):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"{file.file_name}", callback_data=(f'mypmfile#{file.file_id}' if chat_type == enums.ChatType.PRIVATE else f'files#{file.file_id}') 
+                    text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
                 ),
                 InlineKeyboardButton(
                     text=f"{get_size(file.file_size)}",
-                    callback_data=(f'mypmfile#{file.file_id}' if chat_type == enums.ChatType.PRIVATE else f'files_#{file.file_id}'), 
+                    callback_data=f'files_#{file.file_id}', 
                 ),
             ]
             for file in files
@@ -91,7 +108,7 @@ async def next_page(bot, query):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=(f'mypmfile#{file.file_id}' if chat_type == enums.ChatType.PRIVATE else f'files#{file.file_id}')
+                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
                 ),
             ]
             for file in files
