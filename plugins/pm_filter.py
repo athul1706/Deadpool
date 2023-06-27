@@ -43,6 +43,7 @@ async def give_filter(client, message):
 
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
+    chat_type = query.message.chat.type
     ident, req, key, offset = query.data.split("_")
     try:
         offset = int(offset)
