@@ -434,9 +434,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
             f_caption = f_caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
         if CUSTOM_FILE_CAPTION:
             try:
+                es_f_caption = re.escape(f_caption) 
                 f_caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
                                                        file_size='' if size is None else size,
-                                                       file_caption='' if f_caption is None else f_caption)
+                                                       file_caption='' if es_f_caption is None else es_f_caption)
             except Exception as e:
                 logger.exception(e)
                 f_caption = f_caption
