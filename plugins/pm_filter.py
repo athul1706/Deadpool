@@ -7,7 +7,6 @@ import time
 import datetime
 import pytz
 import shutil 
-from fuzzywuzzy import fuzz
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from Script import script
 import pyrogram
@@ -18,7 +17,7 @@ from info import ADMINS, AUTH_CHANNEL, AUTH_USERS, CUSTOM_FILE_CAPTION, AUTH_GRO
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
-from utils import get_size, is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings, humanbytes
+from utils import get_size, is_subscribed, get_poster, search_gagala, file_caption, temp, get_settings, save_group_settings, humanbytes
 from database.users_chats_db import db
 from database.ia_filterdb import Media, get_file_details, get_search_results
 from database.filters_mdb import (
@@ -33,26 +32,6 @@ logger.setLevel(logging.ERROR)
 
 BUTTONS = {}
 SPELL_CHECK = {}
-
-def file_caption(caption, title):
-    # Remove unwanted entities from the caption
-    caption = caption.split('\n')[0]
-    
-    if len(caption) > 1024:
-        caption = caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
-
-    if CUSTOM_FILE_CAPTION:
-        try:
-            caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
-                                                 file_caption='' if caption is None else caption)
-        except Exception as e:
-            logger.exception(e)
-            caption = caption
-
-    if caption is None or fuzz.partial_ratio(caption, title) < 70:
-        caption = title
-
-    return caption
     
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
@@ -370,17 +349,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
             size = get_size(files.file_size)
             f_caption = files.caption
             settings = await get_settings(query.message.chat.id)
-            if CUSTOM_FILE_CAPTION:
-                try:
-                    f_caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
-                                                           file_size='' if size is None else size,
-                                                           file_caption='' if f_caption is None else f_caption)
-                except Exception as e:
-                    logger.exception(e)
-                f_caption = f_caption
-            if f_caption is None:
-                f_caption = f"{files.file_name}"
-
+            f_caption = file_caption(f_caption, title)
+            
             try:               
                 if AUTH_CHANNEL and not await is_subscribed(client, query):
                     await client.send_message(query_from_user.id, "/start") 
@@ -420,16 +390,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         title = files.file_name
         size = get_size(files.file_size)
         f_caption = files.caption
-        if CUSTOM_FILE_CAPTION:
-            try:
-                f_caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
-                                                       file_size='' if size is None else size,
-                                                       file_caption='' if f_caption is None else f_caption)
-            except Exception as e:
-                logger.exception(e)
-                f_caption = f_caption
-        if f_caption is None:
-            f_caption = f"{title}"
+        f_caption = file_caption(f_caption, title)
+        
         await query.answer()
         await client.send_cached_media(
             chat_id=query.from_user.id,
