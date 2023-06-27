@@ -43,8 +43,6 @@ async def give_filter(client, message):
 @Client.on_callback_query(filters.regex(r"^(ynext|next)"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
-    if int(req) not in [query.from_user.id, 0]:
-        return await query.answer("oKda", show_alert=True)
     try:
         offset = int(offset)
     except:
@@ -53,7 +51,17 @@ async def next_page(bot, query):
     if not search:
         await query.answer("You are using one of my old messages, please send the request again.", show_alert=True)
         return
-
+    if query.message.chat.type == 'private':
+        # Private chat next button functionality
+        # Implement the logic for private chat here
+        pass
+    else:
+        if int(req) not in [query.from_user.id, 0]:
+            return await query.answer("oKda", show_alert=True)
+        
+        # Group chat next button functionality
+        # Implement the logic for group chat here
+        pass
     files, n_offset, total = await get_search_results(search, offset=offset, filter=True)
     try:
         n_offset = int(n_offset)
