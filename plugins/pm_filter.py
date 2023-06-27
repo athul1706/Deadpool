@@ -45,6 +45,8 @@ async def give_filter(client, message):
 async def next_page(bot, query):
     chat_type = query.message.chat.type
     ident, req, key, offset = query.data.split("_")
+    if int(req) not in [query.from_user.id, 0]:
+        return await query.answer("oKda", show_alert=True)
     try:
         offset = int(offset)
     except:
@@ -53,35 +55,7 @@ async def next_page(bot, query):
     if not search:
         await query.answer("You are using one of my old messages, please send the request again.", show_alert=True)
         return
-    if chat_type == enums.ChatType.PRIVATE:
-        req = query.from_user.id
-        # Private chat next button functionality
-        # Implement the logic for private chat here
-        files, n_offset, total = await get_search_results(search, offset=offset, filter=True)
-        try:
-            n_offset = int(n_offset)
-        except:
-            n_offset = 0
-        
-        if not files:
-            return
 
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"{file.file_name} | {get_size(file.file_size)}",
-                    callback_data=f'mypmfile#{file.file_id}'
-                ),
-            ]
-            for file in files
-        ]
-    else:
-        if int(req) not in [query.from_user.id, 0]:
-            return await query.answer("oKda", show_alert=True)
-        
-        # Group chat next button functionality
-        # Implement the logic for group chat here
-        pass
     files, n_offset, total = await get_search_results(search, offset=offset, filter=True)
     try:
         n_offset = int(n_offset)
@@ -91,15 +65,11 @@ async def next_page(bot, query):
     if not files:
         return
     settings = await get_settings(query.message.chat.id)
-    if not settings['button']:
+    if settings['button']:
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
-                ),
-                InlineKeyboardButton(
-                    text=f"{get_size(file.file_size)}",
-                    callback_data=f'files_#{file.file_id}', 
+                    text=f'[{get_size(file.file_size)}] 📂{file.file_name.replace("_", " ")}', callback_data=(f'mypmfile#{file.file_id}' if chat_type==enums.ChatType.PRIVATE else f'files#{file.file_id}') 
                 ),
             ]
             for file in files
@@ -108,12 +78,16 @@ async def next_page(bot, query):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
+                    text=f"{file.file_name}", callback_data=(f'mypmfile#{file.file_id}' if chat_type==enums.ChatType.PRIVATE else f'files#{file.file_id}') 
+                ),
+                InlineKeyboardButton(
+                    text=f"{get_size(file.file_size)}",
+                    callback_data=(f'mypmfile#{file.file_id}' if chat_type==enums.ChatType.PRIVATE else f'files#{file.file_id}'), 
                 ),
             ]
             for file in files
         ]
-        
+
     if 0 < offset <= 10:
         off_set = 0
     elif offset == 0:
@@ -123,7 +97,7 @@ async def next_page(bot, query):
     if n_offset == 0:
         btn.append(
             [InlineKeyboardButton("« ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"),
-             InlineKeyboardButton(f"📃 Pages {math.ceil(int(offset) / 10) + 1} / {math.ceil(total / 10)}",
+             InlineKeyboardButton(f"📃 ᴘᴀɢᴇs {math.ceil(int(offset) / 10) + 1} / {math.ceil(total / 10)}",
                                   callback_data="pages")]
         )
     elif off_set is None:
@@ -134,7 +108,7 @@ async def next_page(bot, query):
         btn.append(
             [
                 InlineKeyboardButton("« ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"),
-                InlineKeyboardButton(f"🗓 {math.ceil(int(offset) / 10) + 1} / {math.ceil(total / 10)}", callback_data="pages"),
+                InlineKeyboardButton(f"📑 {math.ceil(int(offset) / 10) + 1} / {math.ceil(total / 10)}", callback_data="pages"),
                 InlineKeyboardButton("ɴᴇxᴛ »", callback_data=f"next_{req}_{key}_{n_offset}")
             ],
         )
@@ -145,7 +119,6 @@ async def next_page(bot, query):
     except MessageNotModified:
         pass
     await query.answer()
-
 
 @Client.on_callback_query(filters.regex(r"^spolling"))
 async def advantage_spoll_choker(bot, query):
