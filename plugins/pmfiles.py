@@ -65,7 +65,7 @@ async def privat_in(client, message):
             req = message.from_user.id if message.from_user else 0
             mention = message.from_user.mention
             btn.append(
-                [InlineKeyboardButton(text=f"🗓 1/{round(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="NEXT ⏩",callback_data=f"ynext_{req}_{key}_{offset}")]
+                [InlineKeyboardButton(text=f"🗓 1/{round(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="NEXT ⏩",callback_data=f"next_{req}_{key}_{offset}")]
             )
         else:
             btn.append(
