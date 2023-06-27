@@ -18,7 +18,7 @@ from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from utils import get_size, is_subscribed, get_poster, search_gagala, file_caption, temp, get_settings, save_group_settings, humanbytes
 from database.users_chats_db import db
-from database.ia_filterdb import Media, get_file_details, get_search_results
+from database.ia_filterdb import Media, get_file_details, get_search_results, get_pmsearch_results
 from database.filters_mdb import (
     del_all,
     find_filter,
@@ -47,7 +47,7 @@ async def privat_in(client, message):
     if 2 < len(message.text) < 100:
         
         search = message.text
-        files, offset, total_results = await get_search_results(search.lower(), offset=0)
+        files, offset, total_results = await get_pmsearch_results(search.lower(), offset=0)
         if not files:
             return
         btn = [
