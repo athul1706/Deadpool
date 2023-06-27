@@ -47,7 +47,7 @@ async def privat_in(client, message):
     if 2 < len(message.text) < 100:
         
         search = message.text
-        files, offset, total_results = await get_pmsearch_results(search.lower(), offset=0)
+        files, offset, total_results = await get_search_results(search.lower(), offset=0)
         if not files:
             return
         btn = [
