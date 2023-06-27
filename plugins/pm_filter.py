@@ -91,7 +91,7 @@ async def next_page(bot, query):
                 ),
                 InlineKeyboardButton(
                     text=f"{get_size(file.file_size)}",
-                    callback_data=(f'mypmfile#{file.file_id}' if chat_type == enums.ChatType.PRIVATE else f'files_#{file.file_id}',
+                    callback_data=(f'mypmfile#{file.file_id}' if chat_type == enums.ChatType.PRIVATE else f'files_#{file.file_id}'), 
                 ),
             ]
             for file in files
