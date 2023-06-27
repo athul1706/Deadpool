@@ -926,8 +926,8 @@ async def private_in(client, msg, spoll=False):
         btn.append(
             [InlineKeyboardButton(text="📑 1/1", callback_data="pages")]
         )
-    imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
-    TEMPLATE = settings['template']
+    imdb = await get_poster(search, file=(files[0]).file_name)
+    TEMPLATE = IMDB_TEMPLATE
     if imdb:
         user = message.from_user
         first = 'Anonymous' if not user else message.from_user.first_name
