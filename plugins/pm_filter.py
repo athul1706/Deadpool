@@ -34,13 +34,9 @@ logger.setLevel(logging.ERROR)
 BUTTONS = {}
 SPELL_CHECK = {}
 
-def file_caption(caption, title, file_format):
+def file_caption(caption, title):
     # Remove unwanted entities from the caption
-    pattern = r'@[^\s]+|https?://[^\s]+|\[.*?\]\(.*?\)|[^a-zA-Z0-9\s\-.(),<>]|\.(?:\s*){}(?:\s*).*?$'.format(file_format)
-    caption = re.sub(pattern, '', caption).strip()
-
-    # Remove unwanted text after the file caption
-    caption = caption.split(file_format)[0] + file_format
+    caption = caption.split(title)[0] + title
 
     if len(caption) > 1024:
         caption = caption[:1021] + '...'  # Truncate the caption if it exceeds 1024 characters
@@ -451,7 +447,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         title = files.file_name
         size = get_size(files.file_size)
         f_caption = files.caption 
-        f_caption = file_caption(f_caption, title, file_format)
+        f_caption = file_caption(f_caption, title)
      
         await query.answer()
         await asyncio.sleep(1) 
