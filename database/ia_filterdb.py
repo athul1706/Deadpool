@@ -99,7 +99,12 @@ async def get_search_results(query, file_type=None, max_results=10, offset=0, fi
 
     if next_offset > total_results:
         next_offset = None
-
+        
+    print("Query:", query)
+    print("Offset:", offset)
+    print("Total Results:", total_results)
+    print("Next Offset:", next_offset)
+    
     cursor = Media.find(filter)
     # Sort by recent
     cursor.sort('$natural', -1)
