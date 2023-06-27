@@ -74,16 +74,7 @@ async def next_page(bot, query):
     if not files:
         return
     settings = await get_settings(query.message.chat.id)
-    if settings['button']:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=(f'mypmfile#{file.file_id}' if chat_type == enums.ChatType.PRIVATE else f'files#{file.file_id}')
-                ),
-            ]
-            for file in files
-        ]
-    else:
+    if not settings['button']:
         btn = [
             [
                 InlineKeyboardButton(
@@ -96,7 +87,16 @@ async def next_page(bot, query):
             ]
             for file in files
         ]
-
+    else:
+        btn = [
+            [
+                InlineKeyboardButton(
+                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=(f'mypmfile#{file.file_id}' if chat_type == enums.ChatType.PRIVATE else f'files#{file.file_id}')
+                ),
+            ]
+            for file in files
+        ]
+        
     if 0 < offset <= 10:
         off_set = 0
     elif offset == 0:
