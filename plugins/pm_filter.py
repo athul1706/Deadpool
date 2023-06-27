@@ -895,7 +895,7 @@ async def manual_filters(client, message, text=False):
 
 @Client.on_message(filters.text & filters.private)
 async def private_in(client, msg, spoll=False):
-    if message.text.startswith("/"): return  # ignore commands 
+    if msg.text.startswith("/"): return  # ignore commands 
     if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
          return
     if 2 < len(message.text) < 100:
