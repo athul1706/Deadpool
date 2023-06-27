@@ -32,6 +32,74 @@ logger.setLevel(logging.ERROR)
 
 BUTTONS = {}
 SPELL_CHECK = {}
+
+
+@Client.on_callback_query(filters.regex(r"^ynext"))
+async def ynext_page(bot, query):
+    ident, _, key, offset = query.data.split("_")
+    try:
+        offset = int(offset)
+    except:
+        offset = 0
+    search = BUTTONS.get(key)
+    if not search:
+        await query.answer("You are using this for one of my old messages, please send the request again.", show_alert=True)
+        return
+
+    files, n_offset, total = await get_search_results(search, offset=offset, filter=True)
+    try:
+        n_offset = int(n_offset)
+    except:
+        n_offset = 0
+
+    if not files:
+        return
+
+    btn = [
+        [
+            InlineKeyboardButton(
+                text=f"📂[{get_size(file.file_size)}]📂 {file.file_name}", callback_data=f'mypmfile#{file.file_id} if query.message.chat.type == "private" else files#{file.file_id}'
+            ),
+        ]
+        for file in files
+    ]
+
+    if 0 < offset <= 10:
+        off_set = 0
+    elif offset == 0:
+        off_set = None
+    else:
+        off_set = offset - 10
+
+    if n_offset == 0:
+        btn.append(
+            [
+                InlineKeyboardButton("⏪ BACK", callback_data=f"ynext_{ident}_{key}_{off_set}"),
+                InlineKeyboardButton(f"📃 Pages {round(int(offset)/10)+1} / {round(total/10)}", callback_data="pages")
+            ]
+        )
+    elif off_set is None:
+        btn.append(
+            [
+                InlineKeyboardButton(f"🗓 {round(int(offset)/10)+1} / {round(total/10)}", callback_data="pages"),
+                InlineKeyboardButton("NEXT ⏩", callback_data=f"ynext_{ident}_{key}_{n_offset}")
+            ]
+        )
+    else:
+        btn.append(
+            [
+                InlineKeyboardButton("⏪ BACK", callback_data=f"ynext_{ident}_{key}_{off_set}"),
+                InlineKeyboardButton(f"🗓 {round(int(offset)/10)+1} / {round(total/10)}", callback_data="pages"),
+                InlineKeyboardButton("NEXT ⏩", callback_data=f"ynext_{ident}_{key}_{n_offset}")
+            ]
+        )
+
+    try:
+        await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
+    except MessageNotModified:
+        pass
+
+    await query.answer()
     
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
@@ -40,7 +108,7 @@ async def give_filter(client, message):
         await auto_filter(client, message)
 
 
-@Client.on_callback_query(filters.regex(r"^(ynext|next)"))
+@Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
     try:
