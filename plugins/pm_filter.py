@@ -121,11 +121,7 @@ async def next_page(bot, query):
                 InlineKeyboardButton("ɴᴇxᴛ »", callback_data=f"next_{req}_{key}_{n_offset}") 
             ],
         )
-    
-    if query.message.chat.type == enums.ChatType.PRIVATE:
-        # Remove the size buttons for private chats
-        btn = [[button[0]] for button in btn]
-    
+
     try:
         await query.edit_message_reply_markup(
             reply_markup=InlineKeyboardMarkup(btn)
