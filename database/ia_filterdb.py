@@ -26,7 +26,9 @@ class Media(Document):
     file_type = fields.StrField(allow_none=True)
     mime_type = fields.StrField(allow_none=True)
     caption = fields.StrField(allow_none=True)
-
+    codec = fields.StrField(allow_none=True)  # Added codec field
+    resolution = fields.StrField(allow_none=True)  # Added resolution field
+    
     class Meta:
         indexes = ('$file_name', )
         collection_name = COLLECTION_NAME
@@ -47,6 +49,8 @@ async def save_file(media):
             file_type=media.file_type,
             mime_type=media.mime_type,
             caption=media.caption.html if media.caption else None,
+            codec=media.codec,
+            resolution=media.resolution
         )
     except ValidationError:
         logger.exception('Error occurred while saving file in database')
