@@ -25,7 +25,7 @@ class Media(Document):
     file_size = fields.IntField(required=True)
     file_type = fields.StrField(allow_none=True)
     mime_type = fields.StrField(allow_none=True)
-    caption = fields.StrField(allow_none=True)
+
     codec = fields.StrField(allow_none=True)  # Added codec field
     resolution = fields.StrField(allow_none=True)  # Added resolution field
     
