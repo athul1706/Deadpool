@@ -33,16 +33,6 @@ class Media(Document):
         indexes = ('$file_name', )
         collection_name = COLLECTION_NAME
 
-async def migrate_database():
-    cursor = Media.find({})
-    async for document in cursor:
-        if 'codec' not in document or 'resolution' not in document:
-            document['codec'] = None  # Set default value for codec
-            document['resolution'] = None  # Set default value for resolution
-            await document.commit()
-            logger.info(f'Updated document with _id: {document["_id"]} to include codec and resolution fields.')
-
-
 async def save_file(media):
     """Save file in database"""
 
@@ -168,7 +158,3 @@ def unpack_new_file_id(new_file_id):
     file_ref = encode_file_ref(decoded.file_reference)
     return file_id, file_ref
 
-if __name__ == "__main__":
-    logger.info("Starting database migration...")
-    await migrate_database()
-    logger.info("Database migration completed.")
